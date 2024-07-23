@@ -29,7 +29,7 @@ public class Main {
             String[] input = in.readLine().split(" ");
 
             int sum = 0;
-            for(int j = 1; j < 6; j++)  sum += Integer.parseInt(input[j]);
+            for(int j = 1; j < input.length; j++)  sum += Integer.parseInt(input[j]);
 
             arr[i] = new myClass((char)('A' + i), sum);
             sb.append(arr[i].name).append(" - ").append(arr[i].score).append("\n");

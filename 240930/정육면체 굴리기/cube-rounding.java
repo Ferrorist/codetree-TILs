@@ -104,8 +104,8 @@ public class Main {
         StringTokenizer st = new StringTokenizer(in.readLine());
         map = new int[Integer.parseInt(st.nextToken())][Integer.parseInt(st.nextToken())];
 
-        dice_x = Integer.parseInt(st.nextToken());
         dice_y = Integer.parseInt(st.nextToken());
+        dice_x = Integer.parseInt(st.nextToken());
         diceRoot = new int[Integer.parseInt(st.nextToken())];
 
         for(int y = 0; y < map.length; y++){

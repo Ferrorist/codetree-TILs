@@ -1,5 +1,6 @@
+// 해설지를 참고한 코드
 import java.io.*;
-import java.util.*;
+import java.util.StringTokenizer;
 public class Main {
     private static class Dice {
         int Front, Up, Right;

@@ -74,6 +74,15 @@ public class Main {
         void setBottom(int value){
             dice[1] = value;
         }
+
+        String printDice() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("  ").append(dice[2]).append("\n");
+            sb.append(dice[3]).append(" ").append(dice[1]).append(" ").append(dice[4]).append("\n");
+            sb.append("  ").append(dice[5]).append("\n");
+            sb.append("  ").append(dice[6]);
+            return sb.toString();
+        }
     }
 
     private static BufferedReader in;
@@ -120,7 +129,6 @@ public class Main {
             dice.moveDice(diceRoot[d]);
             if(map[dy][dx] == 0){
                 map[dy][dx] = dice.getBottom();
-                dice.setBottom(0);
             }
             else {
                 dice.setBottom(map[dy][dx]);
@@ -136,5 +144,15 @@ public class Main {
 
     private static boolean checkRange(int y, int x){
         return y >= 0 && y < map.length && x >= 0 && x < map[0].length;
+    }
+
+    private static void printMap() {
+        StringBuilder sb = new StringBuilder();
+        for(int y = 0; y < map.length; y++){
+            for(int x = 0; x < map[0].length; x++) sb.append(map[y][x]).append(" ");
+            if(y < map.length - 1)  sb.append("\n");
+        }
+
+        System.out.println(sb.toString());
     }
 }

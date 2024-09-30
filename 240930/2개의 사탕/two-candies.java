@@ -120,8 +120,6 @@ public class Main {
             for(int d = 0; d < dir.length; d++){
                 GameBoard processBoard = current.copyBoard();
                 processBoard.count += 1;
-                // System.out.println("before process: ");
-                // processBoard.printBoard();
                 boolean red, blue;
                 if(isFront(processBoard.Red, processBoard.Blue, d)) { // 빨간 사탕 먼저 움직임
                     red = process(processBoard, processBoard.Red, d, true);
@@ -132,24 +130,11 @@ public class Main {
                     red = process(processBoard, processBoard.Red, d, true);
                 }
 
-                // System.out.println("after process: ");
-                // processBoard.printBoard();
-                // System.out.println("red: " + red + ", blue: " + blue);
-                // System.out.println(current.Red.y + ", " + current.Red.x);
-                // System.out.println(processBoard.Red.y + ", " + processBoard.Red.x);
-                // System.out.println(current.Blue.y + ", " + current.Blue.x);
-                // System.out.println(processBoard.Blue.y + ", " + processBoard.Blue.x);
-
-                // System.out.println("변화가 없는가?: " + (processBoard.Red.equalsCorr(current.Red) && processBoard.Blue.equalsCorr(current.Blue)));
-
                 // 진행하여도 빨간 사탕과 파란 사탕의 위치가 같을 경우 Queue에 넣지 않음.
                 if(processBoard.Red.equalsCorr(current.Red) && processBoard.Blue.equalsCorr(current.Blue))  continue;
                 else if(blue)   continue;   // 파란 사탕이 들어갔을 경우 해당 경우 또한 Queue에 넣지 않음.
                 else if(red)    return processBoard.count; // 빨간 사탕만 들어갔다면 횟수 return
-                else {
-                    BoardQueue.offer(processBoard); // 둘 다 들어가지 않았으므로 해당 경우를 Queue에 넣음.
-                    // System.out.println("Queue에 넣음!");
-                }
+                else BoardQueue.offer(processBoard); // 둘 다 들어가지 않았으므로 해당 경우를 Queue에 넣음.
             }
         }
 

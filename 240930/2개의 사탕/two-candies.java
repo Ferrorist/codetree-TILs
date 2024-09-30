@@ -116,7 +116,7 @@ public class Main {
     private static int solve() {
         while(!BoardQueue.isEmpty()){
             GameBoard current = BoardQueue.poll();
-            if(current.count > LIMIT)   continue; // 제한 횟수 초과 시 continue
+            if(current.count >= LIMIT)   continue; // 제한 횟수 초과 시 continue
             for(int d = 0; d < dir.length; d++){
                 GameBoard processBoard = current.copyBoard();
                 processBoard.count += 1;

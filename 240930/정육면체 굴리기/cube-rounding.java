@@ -111,13 +111,13 @@ public class Main {
     private static void solve() {
         Dice dice = new Dice();
         StringBuilder sb = new StringBuilder();
-        for(int d : diceRoot){
-            int dy = dice_y + dir[d][0];
-            int dx = dice_x + dir[d][1];
+        for(int d = 0; d < diceRoot.length; d++){
+            int dy = dice_y + dir[diceRoot[d]][0];
+            int dx = dice_x + dir[diceRoot[d]][1];
 
             if(!checkRange(dy, dx)) continue;
-            
-            dice.moveDice(d);
+
+            dice.moveDice(diceRoot[d]);
             if(map[dy][dx] == 0){
                 map[dy][dx] = dice.getBottom();
                 dice.setBottom(0);
@@ -126,8 +126,9 @@ public class Main {
                 dice.setBottom(map[dy][dx]);
                 map[dy][dx] = 0;
             }
-            sb.append(dice.getTop()).append("\n");
-            dice_y = dy;    dice_x = dx;
+            sb.append(dice.getTop());
+            if(d < diceRoot.length - 1) sb.append("\n");
+            dice_x = dx;    dice_y = dy;
         }
 
         System.out.println(sb.toString());

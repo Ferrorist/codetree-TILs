@@ -37,6 +37,15 @@ public class Main {
             }
         }
 
+        @Override
+        public int hashCode() {
+            int result = Arrays.deepHashCode(this.map);  // 배열의 해시코드를 계산
+            result = 31 * result + count;
+            result = 31 * result + max_value;
+            return result;
+        }
+
+
         private void printMap() {
             StringBuilder sb = new StringBuilder();
             for(int y = 0; y < this.map.length; y++){
@@ -92,7 +101,6 @@ public class Main {
             GameBoard board = queue.poll();
             answer = Math.max(answer, board.max_value);
             if(board.count >= LIMIT)    continue;
-           
             for(int d = 0; d < dir.length; d++){
                 GameBoard processed = processBoard(board, d);
                 if(!mapSet.contains(processed)){
@@ -165,7 +173,7 @@ public class Main {
             dy = move_y;    dx = move_x;
         }
         if(!encounted) {
-            map[0][x] = map[y][x];  map[y][x] = 0;
+            map[dy][dx] = map[y][x];  map[y][x] = 0;
         }
         return answer;
     }

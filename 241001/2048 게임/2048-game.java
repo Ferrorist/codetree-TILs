@@ -25,16 +25,7 @@ public class Main {
         public boolean equals(Object o){
             if(this == o)   return true;
             else if(!(o instanceof GameBoard)) return false;
-            else {
-                if(this.map.length != ((GameBoard)o).map.length || this.map[0].length != ((GameBoard)o).map[0].length)
-                    return false;
-                for(int y = 0; y < map.length; y++){
-                    for(int x = 0; x < map[0].length; x++){
-                        if(this.map[y][x] != ((GameBoard)o).map[y][x])    return false;
-                    }
-                }
-                return true;
-            }
+            else return Arrays.deepHashCode(this.map) == Arrays.deepHashCode(((GameBoard)o).map);
         }
 
         @Override
@@ -169,5 +160,4 @@ public class Main {
     private static boolean checkRange(int y, int x){
         return y >= 0 && y < mapSize && x >= 0 && x < mapSize;
     }
-
 }

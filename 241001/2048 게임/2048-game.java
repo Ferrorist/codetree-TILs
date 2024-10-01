@@ -26,9 +26,9 @@ public class Main {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             GameBoard other = (GameBoard) o;
-            return count == other.count && max_value == other.max_value && Arrays.deepEquals(map, other.map);
+            return Arrays.deepEquals(map, other.map);
         }
-        
+
         @Override
         public int hashCode() {
             int result = Arrays.deepHashCode(this.map);  // 배열의 해시코드를 계산

@@ -36,11 +36,11 @@ public class Main {
 
     private static BufferedReader in = null;
     private static final int[][] dir = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-    private static int[] locations;
-    private static int[][] map;
+    private static int[] locations; // 각 학생 번호의 학생이 앉은 자리의 번호
+    private static int[][] map; // 놀이기구 자리 현황
     private static String[][] stdInputArray;
-    private static List<Integer>[] left_seats;
-    private static int[] empty_Seatcounts;
+    private static List<Integer>[] left_seats; // 주변에 비어있는 칸이 n개 있는 자리의 번호
+    private static int[] empty_Seatcounts; // 각 자리의 비어있는 자리 수 ( 0 ~ 4 )
     public static void main(String[] args) throws Exception {
         initReader();
         initArguments();
@@ -86,7 +86,7 @@ public class Main {
             for(int j = 1; j < 5; j++)  favorite[j-1] = Integer.parseInt(stdInputArray[i][j]);
 
             int max_count = -1;
-            // 좋아하는 학생의 위치를 파악한 후, 앉은 자리의 주변에 대한 정보를 HashMap에 넣음.
+            // 좋아하는 학생의 위치를 파악한 후, 앉은 자리의 주변. 그 중 비어있는 자리에 대한 정보를 HashMap에 넣음.
             for(int favor: favorite){
                 if(locations[favor] == -1)  continue;
                 int ly = locations[favor] / map.length;
@@ -119,7 +119,6 @@ public class Main {
             else {
                 List<Map.Entry<Seat, Integer>> entrySetList = new ArrayList<>();
                 for(Map.Entry<Seat, Integer> entry: hashMap.entrySet()){
-                    // System.out.println("Entry: [" + entry.getKey().y + ", " + entry.getKey().x + "] : " + entry.getValue());
                     entrySetList.add(entry);
                 }
 

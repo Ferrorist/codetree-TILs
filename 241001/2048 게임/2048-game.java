@@ -44,19 +44,6 @@ public class Main {
             result = 31 * result + max_value;
             return result;
         }
-
-
-        private void printMap() {
-            StringBuilder sb = new StringBuilder();
-            for(int y = 0; y < this.map.length; y++){
-                for(int x = 0; x < this.map[0].length; x++){
-                    sb.append(this.map[y][x]).append(" ");
-                }
-                if(y < this.map.length - 1) sb.append("\n");
-            }
-
-            System.out.println(sb.toString());
-        }
     }
 
     private static BufferedReader in;
@@ -68,7 +55,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         initReader();
         initArguments();
-        solve();
+        int answer = solve();
+        System.out.println(answer);
     }
 
     private static void initReader() {
@@ -92,9 +80,9 @@ public class Main {
         mapSet = new HashSet<>();
     }
 
-    private static void solve() {
-        Queue<GameBoard> queue = new ArrayDeque<>();
+    private static int solve() {
         int answer = 0;
+        Queue<GameBoard> queue = new ArrayDeque<>();
         queue.offer(initMap);   mapSet.add(initMap);
 
         while(!queue.isEmpty()){
@@ -110,7 +98,7 @@ public class Main {
             }
         }
 
-        System.out.println(answer);
+        return answer;
     }
 
     private static GameBoard processBoard(GameBoard board, int d){

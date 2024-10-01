@@ -149,9 +149,7 @@ public class Main {
                 }
             }
         }
-
-        // printMap();
-
+        
         // 점수 계산
         int score = 0;
         for(String[] input : stdInputArray){
@@ -198,16 +196,5 @@ public class Main {
 
     private static int getSeatCount(int y, int x){
         return y * map.length + x;
-    }
-
-    private static void printMap() {
-        StringBuilder sb = new StringBuilder();
-        for(int y = 0; y < map.length; y++){
-            for(int x = 0; x < map[0].length; x++){
-                sb.append(map[y][x]).append(" ");
-            }
-            if(y < map.length - 1)  sb.append("\n");
-        }
-        System.out.println(sb.toString());
     }
 }

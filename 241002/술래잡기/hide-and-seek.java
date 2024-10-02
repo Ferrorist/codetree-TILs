@@ -22,8 +22,7 @@ public class Main {
 
         @Override
         public int compareTo(Runner o){
-            if(this.y != o.y) return this.y - o.y;
-            return this.x - o.x;
+            return this.hashCode() - o.hashCode();
         }
 
         @Override
@@ -104,6 +103,7 @@ public class Main {
                 tagger_moveIdx = (tagger_moveIdx + 1) % moveList.size();
                 tagger_dir = moveList.get(tagger_moveIdx).direction;
             }
+            // System.out.println("[술래 정보] y: " + tagger_y + ", x: " + tagger_x + ", 방향: " + tagger_dir);
 
             // 3. 술래의 도망자 탐색 및 턴 종료
             int catchCount = searchRunner();
@@ -152,16 +152,19 @@ public class Main {
             int cy = runner.y, cx = runner.x;
             int direction = runner.direction;
 
-            if(Math.abs(cy - tagger_y) + Math.abs(cx - tagger_x) > 3)   continue;
+            // 술래와의 거리가 3 초과인 경우 해당 도망자는 이동하지 않음
+            if(Math.abs(cy - tagger_y) + Math.abs(cx - tagger_x) > 3)   continue; 
 
             int dy = cy + dir[direction][0], dx = cx + dir[direction][1];
 
+            // 해당 방향으로 이동할 수 없는 경우, 도망자의 방향을 반대로 먼저 바꿔준다.
             if(!checkRange(dy, dx)){
                 runner.direction = (direction + 2) % 4;
                 direction = runner.direction;
                 dy = cy + dir[direction][0];    dx = cx + dir[direction][1];
             }
 
+            // 이동하려는 위치에 술래가 없다면 이동
             if(tagger_y != dy || tagger_x != dx) {
                 map[cy][cx] = Math.max(map[cy][cx] - 1, 0);  map[dy][dx]++;
                 runner.y = dy;
@@ -190,12 +193,15 @@ public class Main {
             if(!checkRange(dy, dx)) break; // 맵 밖이면 탐색 중단
             if(existTree[dy][dx] || map[dy][dx] <= 0)   continue; // 도망자가 없거나 나무가 있는 곳이면 탐색하지 않음
 
-            Runner[] arr = runnerList.toArray(new Runner[runnerList.size()]);
-            int searchIdx = Arrays.binarySearch(arr, new Runner(dy, dx, 0));
-
-
+            int[] hashCodeArray = new int[runnerList.size()];
+            for(int j = 0; j < hashCodeArray.length; j++){
+                hashCodeArray[j] = runnerList.get(j).hashCode();
+            }
+            int code = 100 * dy + dx;
+            int searchIdx = upperBound(hashCodeArray, code);
             if(searchIdx >= 0){
                 while(runnerList.size() - 1 >= searchIdx && runnerList.get(searchIdx).hashCode() == dy * 100 + dx){
+                    // System.out.println("[remove] runner_y: " + runnerList.get(searchIdx).y + ", runner_x: " + runnerList.get(searchIdx).x);
                     runnerList.remove(searchIdx);
                     count++;
                 }
@@ -205,6 +211,16 @@ public class Main {
         return count;
     }
 
+    private static int upperBound(int[] arr, int code) {
+        int start = 0, end = arr.length;
+        while(start < end){
+            int mid = (start + end) / 2;
+            if(arr[mid] >= code)    end = mid;
+            else start = mid + 1;   
+        }
+
+        return start;
+    }
 
     private static boolean checkRange(int y, int x){
         return y >= 0 && y < map.length && x >= 0 && x < map[0].length;

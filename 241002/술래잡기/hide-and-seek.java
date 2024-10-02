@@ -103,7 +103,6 @@ public class Main {
                 tagger_moveIdx = (tagger_moveIdx + 1) % moveList.size();
                 tagger_dir = moveList.get(tagger_moveIdx).direction;
             }
-            // System.out.println("[술래 정보] y: " + tagger_y + ", x: " + tagger_x + ", 방향: " + tagger_dir);
 
             // 3. 술래의 도망자 탐색 및 턴 종료
             int catchCount = searchRunner();
@@ -193,6 +192,7 @@ public class Main {
             if(!checkRange(dy, dx)) break; // 맵 밖이면 탐색 중단
             if(existTree[dy][dx] || map[dy][dx] <= 0)   continue; // 도망자가 없거나 나무가 있는 곳이면 탐색하지 않음
 
+            // 각 도망자의 hashCode를 사용하여 upperBound로 제거할 술래의 index를 찾는다.
             int[] hashCodeArray = new int[runnerList.size()];
             for(int j = 0; j < hashCodeArray.length; j++){
                 hashCodeArray[j] = runnerList.get(j).hashCode();
@@ -200,8 +200,7 @@ public class Main {
             int code = 100 * dy + dx;
             int searchIdx = upperBound(hashCodeArray, code);
             if(searchIdx >= 0){
-                while(runnerList.size() - 1 >= searchIdx && runnerList.get(searchIdx).hashCode() == dy * 100 + dx){
-                    // System.out.println("[remove] runner_y: " + runnerList.get(searchIdx).y + ", runner_x: " + runnerList.get(searchIdx).x);
+                while(runnerList.size() - 1 >= searchIdx && runnerList.get(searchIdx).hashCode() == code){
                     runnerList.remove(searchIdx);
                     count++;
                 }

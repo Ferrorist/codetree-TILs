@@ -45,7 +45,6 @@ public class Main {
     private static final int[][] dir = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}}; // 상, 우, 하, 좌
     private static int limit_turn = 0;
     private static List<Runner> runnerList;
-    private static boolean[] catched;
     private static int tagger_y, tagger_x, tagger_dir;
     public static void main(String[] args) throws Exception {
         initArguments();

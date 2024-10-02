@@ -191,13 +191,13 @@ public class Main {
             if(!checkRange(dy, dx)) break; // 맵 밖이면 탐색 중단
             if(existTree[dy][dx] || map[dy][dx] <= 0)   continue; // 도망자가 없거나 나무가 있는 곳이면 탐색하지 않음
 
-            // 각 도망자의 hashCode를 사용하여 upperBound로 제거할 술래의 index를 찾는다.
+            // 각 도망자의 hashCode를 사용하여 lowerBound로 제거할 술래의 index를 찾는다.
             int[] hashCodeArray = new int[runnerList.size()];
             for(int j = 0; j < hashCodeArray.length; j++){
                 hashCodeArray[j] = runnerList.get(j).hashCode();
             }
             int code = 100 * dy + dx;
-            int searchIdx = upperBound(hashCodeArray, code);
+            int searchIdx = lowerBound(hashCodeArray, code);
             if(searchIdx >= 0){
                 while(runnerList.size() - 1 >= searchIdx && runnerList.get(searchIdx).hashCode() == code){
                     runnerList.remove(searchIdx);
@@ -209,7 +209,7 @@ public class Main {
         return count;
     }
 
-    private static int upperBound(int[] arr, int code) {
+    private static int lowerBound(int[] arr, int code) {
         int start = 0, end = arr.length;
         while(start < end){
             int mid = (start + end) / 2;

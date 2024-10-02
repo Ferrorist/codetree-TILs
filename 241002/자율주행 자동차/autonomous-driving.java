@@ -1,4 +1,4 @@
-// + 5분
+// + 13분
 import java.io.*;
 import java.util.*;
 public class Main {
@@ -74,7 +74,7 @@ public class Main {
 
         while(true){
             direction = (direction + 3) % 4; // 차를 왼쪽으로 돌림.
-            if(car.checked[direction])  break;
+            if(car.checked[direction])  break; // 모든 방향을 체크하였다면 반복을 중단함. (이동 불가를 의미)
             car.checked[direction] = true;
             int dy = cy + dir[direction][0];
             int dx = cx + dir[direction][1];
@@ -89,7 +89,7 @@ public class Main {
     }
 
     private static void processCar(int dy, int dx, int direction) {
-        if(!checkRange(dy, dx) || map[dy][dx] == WALL)  return;
+        if(!checkRange(dy, dx) || map[dy][dx] == WALL)  return; // 이동할 수 없는 칸 입력을 대비함.
 
         car.y = dy; car.x = dx;
         car.direction = direction;

@@ -6,7 +6,7 @@ public class Main {
     private static int[] parents;
     private static final int LIMIT_ROTATION = 4;
     private static final int[][] dir = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}; // 우, 하, 좌, 상
-    private static List<Integer> squareCount;
+    private static int[] squareCount;
     public static void main(String[] args) throws Exception {
         initArguments();
         int score = solve();
@@ -29,7 +29,7 @@ public class Main {
 
     private static void initStats() {
         initParents();
-        squareCount = new ArrayList<>();
+        squareCount = new int[parents.length];
     }
 
     private static void initParents() {
@@ -41,10 +41,10 @@ public class Main {
         for(int i = 0; i < LIMIT_ROTATION; i++){
             List<int[]> corrList = constructCluster(); // 그룹 생성
             int[][] touchEdges = checkEdges(corrList); // 각 그룹이 서로 맞닿아 있는 변의 수 계산
-            int calc = calcScore(corrList, touchEdges);
-            score += calc; // 예술 점수 계산
+            score += calcScore(corrList, touchEdges); // 예술 점수 계산
             rotateMap(); // 그림 회전
             initStats(); // 회전 후 parents와 squareCount를 초기화
+            
         }
 
         return score;
@@ -76,7 +76,7 @@ public class Main {
                         }
                     }
                 }
-                squareCount.add(count);
+                squareCount[a] = count;
             }
         }
         
@@ -130,7 +130,7 @@ public class Main {
                 if(touchEdges[i][j] <= 0) continue;
                 int ay = corrList.get(i)[0], ax = corrList.get(i)[1];
                 int by = corrList.get(j)[0], bx = corrList.get(j)[1];
-                int countA = squareCount.get(i), countB = squareCount.get(j);
+                int countA = squareCount[ay * map.length + ax], countB = squareCount[by * map.length + bx];
                 int numA = map[ay][ax], numB = map[by][bx];
                 int calc = ((countA + countB) * numA * numB * touchEdges[i][j]);
                 score += calc;
@@ -181,8 +181,8 @@ public class Main {
             }
             cy = dy;    cx = dx;
         }
-
-        deque.offerFirst(deque.pollLast());
+        int count = end_y - start_y;
+        for(int i = 0; i < count; i++) deque.offerFirst(deque.pollLast());  
         for(int[] corr : moveList){
             map[corr[0]][corr[1]] = deque.pollFirst();
         }
@@ -190,13 +190,16 @@ public class Main {
 
     private static int find(int a){
         if(parents[a] == a) return a;
-        else return find(parents[a]);
+        else return parents[a] = find(parents[a]);
     }
 
     private static boolean union(int a, int b) {
-        if(a > b)   return union(b, a);
-        if(parents[a] != parents[b]) {
-            parents[b] = find(parents[a]);  return true;
+        int rootA = find(a);
+        int rootB = find(b);
+        if(rootA != rootB) {
+            if(rootA < rootB)   parents[rootB] = rootA;
+            else parents[rootA] = rootB;
+            return true;
         }
         return false;
     }
@@ -208,7 +211,7 @@ public class Main {
     private static void print2dArray(int[][] arr){
         StringBuilder sb = new StringBuilder();
         for(int y = 0; y < arr.length; y++){
-            for(int x = 0; x < arr[0].length; x++) sb.append(arr[y][x]).append(" ");
+            for(int x = 0; x < arr[0].length; x++) sb.append(arr[y][x]).append("\t");
             if(y < arr.length - 1) sb.append("\n");
         }
         System.out.println(sb.toString());

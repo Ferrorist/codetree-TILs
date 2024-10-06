@@ -83,20 +83,21 @@ public class Main {
     private static long solve() {
         long answer = 0;
         final int[][] starts = {{0, 0}, {map.length-1, 0}, {map.length - 1, map.length - 1}, {0, map.length - 1}};
+        final int[][] moveRounds = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
         for(int round = 1; round <= roundCount; round++){
             for(LinkedList<int[]> team: teamLists){
                 moveTeam(team);
             }
-
             int roundGroup = (round / map.length) % 4;
             int step = (round-1 % map.length);
-            int ry = starts[roundGroup][0] + dir[roundGroup][0] * step, rx = starts[roundGroup][1] + dir[roundGroup][1] * step;
-            
+            int ry = starts[roundGroup][0] + moveRounds[roundGroup][0] * step, rx = starts[roundGroup][1] + moveRounds[roundGroup][1] * step;
 
             int[] result = shootBall(ry, rx, roundGroup);
             if(result[0] != -1) {
-                scores[result[0]] += (long)result[1] * (long)result[1];
+                long calc = (long)result[1] * (long)result[1];
+                scores[result[0]] += calc;
+                teamLists[result[0]] = reverseTeam(result[0]);
             }
 
         }
@@ -163,7 +164,34 @@ public class Main {
         return -1;
     }
 
+    private static LinkedList<int[]> reverseTeam(int teamNum) {
+        LinkedList<int[]> list = new LinkedList<int[]>();
+        while(teamLists[teamNum].size() > 0){
+            list.addLast(teamLists[teamNum].pollLast());
+        }
+
+        int[] head = list.peekFirst();
+        int[] tail = list.peekLast();
+
+        map[head[0]][head[1]] = HEAD;
+        map[tail[0]][tail[1]] = TAIL;
+        return list;
+    }
+
     private static boolean checkRange(int y, int x){
         return y >= 0 && y < map.length && x >= 0 && x < map.length;
+    }
+
+    private static void printMap() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("map: ").append("\n");
+        for(int y = 0; y < map.length; y++) {
+            for(int x = 0; x < map.length; x++) {
+                sb.append(map[y][x]).append(" ");
+            }
+            sb.append("\n");
+        }
+
+        System.out.println(sb.toString());
     }
 }

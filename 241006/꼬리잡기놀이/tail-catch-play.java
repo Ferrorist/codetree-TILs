@@ -89,8 +89,8 @@ public class Main {
             for(LinkedList<int[]> team: teamLists){
                 moveTeam(team);
             }
-            int roundGroup = (round / map.length) % 4;
-            int step = (round-1 % map.length);
+            int roundGroup = ((round-1) / map.length) % 4;
+            int step = ((round-1) % map.length);
             int ry = starts[roundGroup][0] + moveRounds[roundGroup][0] * step, rx = starts[roundGroup][1] + moveRounds[roundGroup][1] * step;
 
             int[] result = shootBall(ry, rx, roundGroup);

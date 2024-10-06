@@ -55,6 +55,7 @@ public class Main {
 
     private static LinkedList<int[]> moveLineBFS(int start_y, int start_x, boolean[][] visited, int teamNum) {
         LinkedList<int[]> list = new LinkedList<>();
+        int[] tail = new int[2];
         Queue<int[]> queue = new ArrayDeque<>();
         queue.offer(new int[]{start_y, start_x});
 
@@ -66,7 +67,13 @@ public class Main {
 
             movelineMap[cy][cx] = teamNum;
             if(map[cy][cx] == HEAD) list.addFirst(new int[]{cy, cx});
-            else if(map[cy][cx] != MOVELINE)    list.addLast(new int[]{cy, cx});
+            else if(map[cy][cx] != MOVELINE)    {
+                if(map[cy][cx] != TAIL) list.addLast(new int[]{cy, cx});
+                else {
+                    tail[0] = cy;   tail[1] = cx;
+                    continue;
+                }
+            }
             movelineMap[cy][cx] = teamNum;
 
             for(int d = 0; d < dir.length; d++){
@@ -77,6 +84,7 @@ public class Main {
             }
         }
 
+        list.addLast(new int[]{tail[0], tail[1]});
         return list;
     }
 

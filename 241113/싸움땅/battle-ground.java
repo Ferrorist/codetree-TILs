@@ -73,8 +73,10 @@ public class Main {
     }
 
     private static void solve() {
-        for (int i = 0; i < rounds; i++) {
+        for (int i = 1; i <= rounds; i++) {
+            // System.out.println("round " + i + ": ");
             processRound();
+            // printPlayersStates();
         }
     }
 
@@ -93,36 +95,49 @@ public class Main {
             if(checkPlayer(dy, dx)) {
                 Player DualPlayer = playerMap[dy][dx];
                 currentPlayer.y = dy;   currentPlayer.x = dx;
+                currentPlayer.dir = direction;
+                playerMap[cy][cx] = null;
+                playerMap[currentPlayer.y][currentPlayer.x] = currentPlayer;
                 DualPlayer(currentPlayer, DualPlayer);
             }
             else {
                 currentPlayer.y = dy;   currentPlayer.x = dx;
+                currentPlayer.dir = direction;
                 process(currentPlayer, 0);
             }
 
             playerMap[cy][cx] = null;
-            playerMap[dy][dx] = currentPlayer;
+            playerMap[currentPlayer.y][currentPlayer.x] = currentPlayer;
+            players[currentPlayer.idx] = currentPlayer;
         }
     }
 
     private static void DualPlayer(Player player1, Player player2) {
-        Player[] DualPlayer = new Player[]{player1, player2};
-        Arrays.sort(DualPlayer);
-        moveLoser(DualPlayer[1]);
-        process(DualPlayer[0], DualPlayer[0].getTotalState() - DualPlayer[1].getTotalState());
+        Player[] DualPlayers = new Player[]{player1, player2};
+        Arrays.sort(DualPlayers);
+        int getScore = Math.abs(DualPlayers[0].getTotalState() - DualPlayers[1].getTotalState());
+        // System.out.println("Winner Player's idx: " + DualPlayers[0].idx + ", getTotalState(): " + DualPlayers[0].getTotalState());
+        // System.out.println("Winner Player's idx: " + DualPlayers[1].idx + ", getTotalState(): " + DualPlayers[1].getTotalState());
+        moveLoser(DualPlayers[1]);
+        process(DualPlayers[0], getScore);
+
+        for(Player player : DualPlayers) {
+            players[player.idx] = player;
+        }
     }
 
     private static void moveLoser(Player player) {
         releasePlayerGun(player);
         int cy = player.y, cx = player.x;
         for (int i = 0; i < dir.length; i++) {
-            int direction = player.dir + i;
+            int direction = (player.dir + i) % dir.length;
             int dy = cy + dir[direction][0];
             int dx = cx + dir[direction][1];
 
             if(checkRange(dy, dx) && !checkPlayer(dy,dx)) {
                 player.y = dy;  player.x = dx;
                 player.dir = direction;
+                process(player, 0);
                 playerMap[cy][cx] = null;
                 playerMap[dy][dx] = player;
                 return;
@@ -172,6 +187,25 @@ public class Main {
 
         System.out.println(sb.toString());
     }
+
+    private static void printPlayersStates() {
+        StringBuilder sb = new StringBuilder();
+        for(Player player : players) {
+            sb.append("[Player " + player.idx + "] ");
+            sb.append("y: ").append(player.y);
+            sb.append(", x: ").append(player.x);
+            sb.append(", dir: ").append(player.dir).append(", state: " + player.state);
+            sb.append(", gunDamage: ");
+            if(player.hasGun == null) {
+                sb.append(0);
+            }
+            else sb.append(player.hasGun.damage);
+            sb.append(", score: ").append(scores[player.idx]);
+            sb.append("\n");
+        }
+
+        System.out.println(sb.toString());
+    }
 }
 
 
@@ -211,7 +245,7 @@ class Player implements Comparable<Player> {
             return null;
         }
         Gun currentGun = this.hasGun;
-        if (this.hasGun.compareTo(o) > 0) {
+        if (this.hasGun.damage < o.damage) {
             this.hasGun = o;
             return currentGun;
         }

@@ -97,7 +97,6 @@ public class Main {
                 currentPlayer.y = dy;   currentPlayer.x = dx;
                 currentPlayer.dir = direction;
                 playerMap[cy][cx] = null;
-                playerMap[currentPlayer.y][currentPlayer.x] = currentPlayer;
                 DualPlayer(currentPlayer, DualPlayer);
             }
             else {

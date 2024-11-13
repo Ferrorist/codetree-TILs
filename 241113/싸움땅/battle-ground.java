@@ -46,7 +46,6 @@ public class Main {
 
     private static int[][] getDamageMap(int length) throws Exception {
         int[][] damageMap = new int[length][length];
-
         for (int y = 0; y < length; y++) {
             String[] inputs = in.readLine().split(" ");
             for (int x = 0; x < length; x++) {
@@ -112,7 +111,6 @@ public class Main {
 
     private static void DualPlayer(Player... duals) {
         Player[] DualPlayers = new Player[]{duals[0], duals[1]};
-
         for(Player player : duals) {
             playerMap[player.y][player.x] = null;
         }   
@@ -180,36 +178,12 @@ public class Main {
 
     private static void printScores() {
         StringBuilder sb = new StringBuilder();
-
         for (int score : scores) {
             sb.append(score).append(" ");
         }
-
-        System.out.println(sb.toString());
-    }
-
-    private static void printPlayersStates() {
-        StringBuilder sb = new StringBuilder();
-        for(Player player : players) {
-            sb.append("[Player " + player.idx + "] ");
-            sb.append("y: ").append(player.y);
-            sb.append(", x: ").append(player.x);
-            sb.append(", dir: ").append(player.dir).append(", state: " + player.state);
-            sb.append(", gunDamage: ");
-            if(player.hasGun == null) {
-                sb.append(0);
-            }
-            else sb.append(player.hasGun.damage);
-            sb.append(", score: ").append(scores[player.idx]);
-            sb.append("\n");
-        }
-
         System.out.println(sb.toString());
     }
 }
-
-
-
 
 class Gun implements Comparable<Gun> {
     int damage;

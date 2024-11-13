@@ -83,36 +83,44 @@ public class Main {
     private static void processRound() {
         for (int i = 0; i < players.length; i++) {
             Player currentPlayer = players[i];
-            int cy = currentPlayer.y, cx = currentPlayer.x;
-            int direction = currentPlayer.dir;
+            playerMap[currentPlayer.y][currentPlayer.x] = null;
 
-            int dy = cy + dir[direction][0], dx = cx + dir[direction][1];
-            if (!checkRange(dy, dx)) {
-                direction = (direction + (dir.length / 2)) % dir.length;
-                dy = cy + dir[direction][0]; dx = cx + dir[direction][1];
-            }
+            movePlayer(currentPlayer);
+            int dy = currentPlayer.y, dx = currentPlayer.x;
 
             if(checkPlayer(dy, dx)) {
-                Player DualPlayer = playerMap[dy][dx];
-                currentPlayer.y = dy;   currentPlayer.x = dx;
-                currentPlayer.dir = direction;
-                playerMap[cy][cx] = null;
-                DualPlayer(currentPlayer, DualPlayer);
+                DualPlayer(currentPlayer, playerMap[dy][dx]);
             }
             else {
-                currentPlayer.y = dy;   currentPlayer.x = dx;
-                currentPlayer.dir = direction;
                 process(currentPlayer, 0);
             }
-
-            playerMap[cy][cx] = null;
             playerMap[currentPlayer.y][currentPlayer.x] = currentPlayer;
             players[currentPlayer.idx] = currentPlayer;
         }
     }
 
-    private static void DualPlayer(Player player1, Player player2) {
-        Player[] DualPlayers = new Player[]{player1, player2};
+    private static void movePlayer(Player player) {
+        int cy = player.y, cx = player.x;
+        int direction = player.dir;
+
+        playerMap[cy][cx] = null;
+        int dy = cy + dir[direction][0], dx = cx + dir[direction][1];
+        if (!checkRange(dy, dx)) {
+            direction = (direction + (dir.length / 2)) % dir.length;
+            dy = cy + dir[direction][0]; dx = cx + dir[direction][1];
+        }
+
+        player.y = dy;  player.x = dx;
+        player.dir = direction;
+    }
+
+    private static void DualPlayer(Player... duals) {
+        Player[] DualPlayers = new Player[]{duals[0], duals[1]};
+
+        for(Player player : duals) {
+            playerMap[player.y][player.x] = null;
+        }
+
         Arrays.sort(DualPlayers);
         int getScore = Math.abs(DualPlayers[0].getTotalState() - DualPlayers[1].getTotalState());
         // System.out.println("Winner Player's idx: " + DualPlayers[0].idx + ", getTotalState(): " + DualPlayers[0].getTotalState());
@@ -121,6 +129,7 @@ public class Main {
         process(DualPlayers[0], getScore);
 
         for(Player player : DualPlayers) {
+            playerMap[player.y][player.x] = player;
             players[player.idx] = player;
         }
     }
@@ -137,8 +146,6 @@ public class Main {
                 player.y = dy;  player.x = dx;
                 player.dir = direction;
                 process(player, 0);
-                playerMap[cy][cx] = null;
-                playerMap[dy][dx] = player;
                 return;
             }
         }

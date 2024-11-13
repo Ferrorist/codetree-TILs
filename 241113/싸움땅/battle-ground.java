@@ -74,17 +74,13 @@ public class Main {
 
     private static void solve() {
         for (int i = 1; i <= rounds; i++) {
-            // System.out.println("round " + i + ": ");
             processRound();
-            // printPlayersStates();
         }
     }
 
     private static void processRound() {
         for (int i = 0; i < players.length; i++) {
             Player currentPlayer = players[i];
-            playerMap[currentPlayer.y][currentPlayer.x] = null;
-
             movePlayer(currentPlayer);
             int dy = currentPlayer.y, dx = currentPlayer.x;
 
@@ -119,12 +115,10 @@ public class Main {
 
         for(Player player : duals) {
             playerMap[player.y][player.x] = null;
-        }
+        }   
 
         Arrays.sort(DualPlayers);
         int getScore = Math.abs(DualPlayers[0].getTotalState() - DualPlayers[1].getTotalState());
-        // System.out.println("Winner Player's idx: " + DualPlayers[0].idx + ", getTotalState(): " + DualPlayers[0].getTotalState());
-        // System.out.println("Winner Player's idx: " + DualPlayers[1].idx + ", getTotalState(): " + DualPlayers[1].getTotalState());
         moveLoser(DualPlayers[1]);
         process(DualPlayers[0], getScore);
 
